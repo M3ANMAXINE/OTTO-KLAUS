@@ -1,32 +1,48 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar app color="info" dark>
+      <v-toolbar-title>EduTecno</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn to="/" text >Home</v-btn> 
+      <v-btn to="/juguetes" text >Juguetes</v-btn> 
+      <v-btn v-if="currentUser" @click.prevent="logout" text>LOGOUT</v-btn> 
+
+    </v-app-bar>    
+    <v-main>
+     <router-view></router-view>
+    </v-main>
+
+    <v-footer
+      absolute
+      class="font-weight-medium"
+    >
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} — <strong>M3ANMAXINE</strong>
+      </v-col>
+    </v-footer>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
-}
+import firebase from 'firebase'
+import {mapState} from 'vuex'
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default {
+  name: 'App',
+  data: () => ({
+    //
+  }),
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  methods: {
+    logout() {
+      firebase.auth().signOut().then( () => {
+        this.$router.push('/')
+        this.setUser(undefined)
+      } )
+    }
+  },
+};
+</script>
