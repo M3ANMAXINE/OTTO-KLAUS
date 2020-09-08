@@ -4,7 +4,7 @@
       <v-toolbar-title>EduTecno</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn to="/" text >Home</v-btn> 
-      <v-btn to="/juguetes" text >Juguetes</v-btn> 
+      <v-btn to="/juguetes" v-if="currentUser" text >Juguetes</v-btn> 
       <v-btn v-if="currentUser" @click.prevent="logout" text>LOGOUT</v-btn> 
 
     </v-app-bar>    
@@ -26,7 +26,7 @@
 <script>
 
 import firebase from 'firebase'
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 
 export default {
   name: 'App',
@@ -37,11 +37,12 @@ export default {
     ...mapState(['currentUser'])
   },
   methods: {
+    ...mapActions(['setUser']),
     logout() {
       firebase.auth().signOut().then( () => {
         this.$router.push('/')
         this.setUser(undefined)
-      } )
+      })
     }
   },
 };

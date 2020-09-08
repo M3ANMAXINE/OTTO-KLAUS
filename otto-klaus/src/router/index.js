@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import firebase from 'firebase'
+import NotFound from '../components/NotFound.vue'
 
 
 Vue.use(VueRouter)
@@ -21,6 +23,11 @@ Vue.use(VueRouter)
     meta: {
       login:true
     }
+  },
+  {
+    path: '/*',
+    name: 'NotFound',
+    component: NotFound
   }
 ]
 
@@ -28,6 +35,18 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+
+router.beforeEach((to, from, next) => {
+
+  let user = firebase.auth().currentUser
+  let authRequired = to.matched.some(route => route.meta.login)
+  if(!user && authRequired) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
