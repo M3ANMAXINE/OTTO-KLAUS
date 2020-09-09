@@ -10,24 +10,28 @@
  
     <v-btn @click="cleanCurrentToy" color="error" class="mr-4">Cancelar</v-btn>
     </v-form>
+<v-container>
+  <input  class="input " type="text" placeholder="Ingrese producto a buscar" v-model="search">
+</v-container>
+
   <v-simple-table dark fixed-header height="600px" class="mt-5">
     <template v-slot:default>
       <thead>
         <tr>
-          <th class="text-left">Codigo</th>
           <th class="text-left">Nombre</th>
-          <th class="text-left">Stock</th>
-           <th class="text-left">Precio</th>
+          <th class="text-left">Precio</th>
+          <th class="text-left">Codigo</th>
+           <th class="text-left">Stock</th>
            <th></th>
            <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="toy in toys" :key="toy.id">
+        <tr v-for="toy in filterList" :key="toy.id">
           <td>{{ toy.data.name }}</td>
           <td>{{ toy.data.price }}</td>
+          <td>{{ toy.data.code }}</td>
           <td>{{ toy.data.stock }}</td>
-           <td>{{ toy.data.code }}</td>
            <td> <v-icon @click="editProduct(toy)">mdi-pencil-outline</v-icon> </td>
            <td> <v-icon @click="removeToy(toy.id)">mdi-delete</v-icon> </td>
         </tr>
@@ -53,11 +57,18 @@ export default {
           price: 0,
           stock: 0
         }
-      }
+      },
+      search: ''
     }
   },
   computed: {
-    ...mapState(['toys', 'overlay'])
+    ...mapState(['toys', 'overlay']),
+    filterList() {
+      return this.toys.filter((toy) => {
+      return toy.data.name.toLowerCase().includes(this.search.toLowerCase())
+
+      })
+    }
   },
   methods: {
     ...mapActions(['setToys', 'submitToy', 'updateToy', 'deleteToy']),

@@ -13,9 +13,9 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="success">Register</v-btn> 
+        <v-btn color="input">Register</v-btn> 
         <v-spacer></v-spacer>      
-        <v-btn @click.prevent="login" color="input">Login</v-btn>
+        <v-btn @click.prevent="login" color="success">Login</v-btn>
       </v-card-actions>
     </v-card>
 </div>

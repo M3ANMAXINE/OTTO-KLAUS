@@ -3,7 +3,7 @@
     <v-app-bar app color="info" dark>
       <v-toolbar-title>EduTecno</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn to="/" text >Home</v-btn> 
+      <v-btn v-if="!currentUser" to="/" text >Home</v-btn> 
       <v-btn to="/juguetes" v-if="currentUser" text >Juguetes</v-btn> 
       <v-btn v-if="currentUser" @click.prevent="logout" text>LOGOUT</v-btn> 
 
