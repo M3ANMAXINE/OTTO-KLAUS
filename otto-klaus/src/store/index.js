@@ -55,7 +55,17 @@ export default new Vuex.Store({
       axios.post('https://us-central1-ottoklauss-5927c.cloudfunctions.net/toys/toy/',toy).then(() => {// cuando se hace un post, no van en url.
         dispatch('setToys')
       })
-      }
+      },
+      updateToy({dispatch}, toy) {
+        axios.put(`https://us-central1-ottoklauss-5927c.cloudfunctions.net/toys/toy/${toy.id}`,toy.data).then(() => {
+        dispatch('setToys')
+      })
+      },
+      deleteToy({dispatch}, id) {
+        axios.delete(`https://us-central1-ottoklauss-5927c.cloudfunctions.net/toys/toy/${id}`).then(() => {
+          dispatch('setToys')
+        })
+        },
   },
   modules: {
   }

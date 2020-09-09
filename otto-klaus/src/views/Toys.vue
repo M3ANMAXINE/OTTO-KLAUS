@@ -8,7 +8,7 @@
 
     <v-btn @click="submitForm" color="success" class="mr-4">{{currentToy.id ? 'Actualizar' : 'Crear' }}</v-btn>
  
-    <v-btn color="error" class="mr-4">Cancelar</v-btn>
+    <v-btn @click="cleanCurrentToy" color="error" class="mr-4">Cancelar</v-btn>
     </v-form>
   <v-simple-table dark fixed-header height="600px" class="mt-5">
     <template v-slot:default>
@@ -18,7 +18,8 @@
           <th class="text-left">Nombre</th>
           <th class="text-left">Stock</th>
            <th class="text-left">Precio</th>
-           
+           <th></th>
+           <th></th>
         </tr>
       </thead>
       <tbody>
@@ -27,6 +28,8 @@
           <td>{{ toy.data.price }}</td>
           <td>{{ toy.data.stock }}</td>
            <td>{{ toy.data.code }}</td>
+           <td> <v-icon @click="editProduct(toy)">mdi-pencil-outline</v-icon> </td>
+           <td> <v-icon @click="removeToy(toy.id)">mdi-delete</v-icon> </td>
         </tr>
       </tbody>
     </template>
@@ -57,26 +60,48 @@ export default {
     ...mapState(['toys', 'overlay'])
   },
   methods: {
-    ...mapActions(['setToys', 'submitToy']),
+    ...mapActions(['setToys', 'submitToy', 'updateToy', 'deleteToy']),
     submitForm() {
       if(!this.currentToy.id) {// si no tiene id, crea
         this.createToy()
       } else {
-        this.updateToy()//si tiene id, modifica
+        this.update(this.currentToy)//si tiene id, modifica
       }
+    },
+    update() {
+        this.updateToy(this.currentToy)
+        this.cleanCurrentToy()
+    },
+    removeToy(id) {
+      let confirmation = confirm('estay seguro choro')
+      if(confirmation) {
+        this.deleteToy(id)
+        this.cleanCurrentToy()
+      }
+      
+
     },
     createToy(){
         const toy = this.currentToy.data 
       this.submitToy(toy)
-      this.cleanCurrentToy
+      this.cleanCurrentToy()
       },
       cleanCurrentToy() {
 
       this.currentToy.data.name = '',
-      this.currentToy.data.price = '0',
+      this.currentToy.data.price = 0,
       this.currentToy.data.code = '',
-      this.currentToy.data.stock = '0'
-    }
+      this.currentToy.data.stock = 0,
+      this.currentToy.id = undefined
+    },
+    editProduct(toy) {
+      this.currentToy.data.code = toy.data.code,
+      this.currentToy.data.name = toy.data.name, 
+      this.currentToy.data.stock= toy.data.stock, 
+      this.currentToy.data.price= toy.data.price,  
+      this.currentToy.id = toy.id
+    },
+
       
   },
   created() {
